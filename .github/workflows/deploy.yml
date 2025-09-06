@@ -1,4 +1,4 @@
-name: Deploy Real Web VM with File Manager
+name: Deploy Web VM with Manual ISO Upload
 
 on:
   push:
@@ -16,17 +16,16 @@ jobs:
 
     - name: Setup directories
       run: |
-        mkdir -p vm/bios vm/images vm/js vm/css
+        mkdir -p vm/bios vm/storage vm/js vm/css
 
-    - name: Download v86 files
+    - name: Download v86 library
       run: |
-        # 下载 v86 核心文件
         curl -L -o vm/v86.js https://cdn.jsdelivr.net/npm/v86@0.2.0/build/libv86.js
-        # 下载 BIOS 文件
-        curl -L -o vm/bios/seabios.bin https://k.asmjs.sh/seabios.bin
-        curl -L -o vm/bios/vgabios.bin https://k.asmjs.sh/vgabios.bin
-        # 下载 Linux 镜像
-        curl -L -o vm/images/linux.iso https://k.asmjs.sh/linux.iso
+
+    - name: Create placeholder BIOS files
+      run: |
+        touch vm/bios/seabios.bin
+        touch vm/bios/vgabios.bin
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
