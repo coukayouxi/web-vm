@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件管理器 - Linux 虚拟机</title>
+    <link rel="stylesheet" href="css/filemanager.css">
+</head>
+<body>
+    <div class="header">
+        <h1>📁 虚拟机文件管理器</h1>
+        <div class="controls">
+            <a href="index.html" class="btn">💻 返回控制台</a>
+            <button id="refreshBtn" class="btn">🔄 刷新</button>
+            <button id="uploadBtn" class="btn">📤 上传文件</button>
+            <button id="newFolderBtn" class="btn">📁 新建文件夹</button>
+            <input type="file" id="fileInput" style="display: none;" multiple>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="sidebar">
+            <div class="panel">
+                <h3>📁 快速访问</h3>
+                <ul class="quick-access">
+                    <li onclick="navigateTo('/')">🏠 根目录</li>
+                    <li onclick="navigateTo('/home')">👤 用户目录</li>
+                    <li onclick="navigateTo('/home/user')">👨‍💻 我的文件</li>
+                    <li onclick="navigateTo('/home/user/Desktop')">🖥️ 桌面</li>
+                    <li onclick="navigateTo('/home/user/Documents')">📄 文档</li>
+                    <li onclick="navigateTo('/home/user/Downloads')">📥 下载</li>
+                    <li onclick="navigateTo('/home/user/Pictures')">🖼️ 图片</li>
+                </ul>
+            </div>
+
+            <div class="panel">
+                <h3>📊 磁盘信息</h3>
+                <div class="disk-info">
+                    <div class="disk-usage">
+                        <div class="usage-bar">
+                            <div class="usage-fill" style="width: 65%"></div>
+                        </div>
+                        <div class="usage-text">65% 已使用</div>
+                    </div>
+                    <p>总容量: 10GB</p>
+                    <p>已使用: 6.5GB</p>
+                    <p>可用空间: 3.5GB</p>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h3>⚙️ 操作</h3>
+                <div class="actions">
+                    <button class="action-btn" onclick="showProperties()">属性</button>
+                    <button class="action-btn" onclick="copySelected()">复制</button>
+                    <button class="action-btn" onclick="cutSelected()">剪切</button>
+                    <button class="action-btn" onclick="pasteHere()">粘贴</button>
+                    <button class="action-btn" onclick="deleteSelected()">删除</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="breadcrumb">
+                <span id="current-path">/home/user</span>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="搜索文件...">
+                    <button onclick="searchFiles()">🔍</button>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <button class="tool-btn" onclick="viewMode('list')">📋 列表</button>
+                <button class="tool-btn" onclick="viewMode('grid')">⬜ 网格</button>
+                <button class="tool-btn" onclick="sortBy('name')">🔤 按名称</button>
+                <button class="tool-btn" onclick="sortBy('size')">📏 按大小</button>
+                <button class="tool-btn" onclick="sortBy('date')">📅 按日期</button>
+            </div>
+
+            <div class="file-list" id="file-list">
+                <!-- 文件列表将通过 JavaScript 动态生成 -->
+            </div>
+
+            <div class="status-bar">
+                <span id="item-count">0 个项目</span>
+                <span id="selected-count">已选择 0 项</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="context-menu" id="contextMenu">
+        <ul>
+            <li onclick="openItem()">打开</li>
+            <li onclick="openInTerminal()">在终端中打开</li>
+            <li onclick="showProperties()">属性</li>
+            <li class="separator"></li>
+            <li onclick="copySelected()">复制</li>
+            <li onclick="cutSelected()">剪切</li>
+            <li onclick="pasteHere()">粘贴</li>
+            <li class="separator"></li>
+            <li onclick="deleteSelected()">删除</li>
+            <li onclick="renameItem()">重命名</li>
+        </ul>
+    </div>
+
+    <div class="modal" id="propertiesModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>文件属性</h2>
+                <span class="close" onclick="closeModal('propertiesModal')">&times;</span>
+            </div>
+            <div class="modal-body" id="properties-content">
+                <!-- 属性内容将动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>正在加载文件列表...</p>
+    </div>
+
+    <script src="js/filemanager.js"></script>
+</body>
+</html>
