@@ -1,0 +1,35 @@
+name: Deploy Real Web VM with File Manager
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup directories
+      run: |
+        mkdir -p vm/bios vm/images vm/js vm/css
+
+    - name: Download v86 files
+      run: |
+        # 下载 v86 核心文件
+        curl -L -o vm/v86.js https://cdn.jsdelivr.net/npm/v86@0.2.0/build/libv86.js
+        # 下载 BIOS 文件
+        curl -L -o vm/bios/seabios.bin https://k.asmjs.sh/seabios.bin
+        curl -L -o vm/bios/vgabios.bin https://k.asmjs.sh/vgabios.bin
+        # 下载 Linux 镜像
+        curl -L -o vm/images/linux.iso https://k.asmjs.sh/linux.iso
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: .
