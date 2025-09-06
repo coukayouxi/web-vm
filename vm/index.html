@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux 虚拟机控制台</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="header">
+        <h1>💻 Linux 虚拟机控制台</h1>
+        <div class="controls">
+            <button id="startBtn" class="btn">▶️ 启动</button>
+            <button id="stopBtn" class="btn">⏹️ 停止</button>
+            <button id="resetBtn" class="btn">🔄 重启</button>
+            <a href="filemanager.html" class="btn btn-secondary">📁 文件管理器</a>
+            <button id="fullscreenBtn" class="btn">⛶ 全屏</button>
+            <div class="status" id="status">准备就绪</div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="vm-container">
+            <div id="vm-screen" class="screen"></div>
+        </div>
+
+        <div class="sidebar">
+            <div class="panel">
+                <h3>📊 系统状态</h3>
+                <div id="system-info">
+                    <p>状态: <span id="vm-status">未启动</span></p>
+                    <p>CPU: <span id="cpu-usage">0%</span></p>
+                    <p>内存: <span id="memory-info">0MB/0MB</span></p>
+                    <p>网络: <span id="network-status">未连接</span></p>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h3>⚡ 常用命令</h3>
+                <div class="commands">
+                    <button class="cmd-btn" onclick="sendCommand('uname -a')">系统信息</button>
+                    <button class="cmd-btn" onclick="sendCommand('curl --version')">curl 版本</button>
+                    <button class="cmd-btn" onclick="sendCommand('ls /')">根目录</button>
+                    <button class="cmd-btn" onclick="sendCommand('ps aux')">进程列表</button>
+                    <button class="cmd-btn" onclick="sendCommand('free -h')">内存信息</button>
+                    <button class="cmd-btn" onclick="sendCommand('df -h')">磁盘空间</button>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h3>🌐 网络测试</h3>
+                <div class="network-test">
+                    <button class="cmd-btn" onclick="testNetwork()">测试网络连接</button>
+                    <button class="cmd-btn" onclick="sendCommand('curl -I https://httpbin.org/get')">HTTP 测试</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p id="loading-text">正在初始化虚拟机...</p>
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <span id="progress-text">0%</span>
+        </div>
+    </div>
+
+    <script src="v86.js"></script>
+    <script src="js/emulator.js"></script>
+</body>
+</html>
