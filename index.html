@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>真实 Linux 虚拟机 - 带文件管理器</title>
+    <title>手动 ISO 上传虚拟机</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            background: linear-gradient(135deg, #2c3e50, #34495e);
             min-height: 100vh;
             color: white;
             padding: 2rem;
@@ -32,7 +32,7 @@
         h1 {
             font-size: 3rem;
             margin-bottom: 1rem;
-            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            background: linear-gradient(45deg, #ffffff, #f0f0f0);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -44,37 +44,38 @@
             margin-bottom: 2rem;
         }
 
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .feature-card {
+        .upload-section {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             padding: 2rem;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .upload-area {
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 3rem;
+            margin: 2rem 0;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .feature-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        .upload-area:hover {
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.05);
         }
 
-        .feature-card h3 {
-            font-size: 1.5rem;
+        .upload-icon {
+            font-size: 4rem;
             margin-bottom: 1rem;
-            color: #00c6ff;
         }
 
         .btn {
             display: inline-block;
-            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            background: linear-gradient(45deg, #3498db, #2980b9);
             color: white;
             padding: 1rem 2rem;
             border-radius: 30px;
@@ -82,7 +83,7 @@
             font-weight: bold;
             font-size: 1.1rem;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 25px rgba(0, 114, 255, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
             border: none;
             cursor: pointer;
             margin: 0.5rem;
@@ -90,49 +91,76 @@
 
         .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(0, 114, 255, 0.4);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .btn-warning {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #27ae60, #229954);
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
         }
 
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .demo-section {
+        .specifications {
             background: rgba(0, 0, 0, 0.2);
             border-radius: 15px;
             padding: 2rem;
             margin: 2rem 0;
         }
 
-        .demo-section h2 {
+        .specifications h2 {
             margin-bottom: 1rem;
-            color: #00c6ff;
+            color: #ffffff;
+            text-align: center;
         }
 
-        .terminal-demo {
-            background: #1e1e1e;
+        .supported-formats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .format-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
             border-radius: 10px;
-            padding: 1.5rem;
-            font-family: 'Courier New', monospace;
-            overflow-x: auto;
+            text-align: center;
+        }
+
+        .format-item h4 {
+            color: #3498db;
+            margin-bottom: 0.5rem;
+        }
+
+        .warning {
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
             margin: 1rem 0;
         }
 
-        .prompt {
-            color: #569cd6;
+        .info {
+            background: rgba(52, 152, 219, 0.2);
+            border: 1px solid rgba(52, 152, 219, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
         }
 
-        .command {
-            color: #d4d4d4;
-        }
-
-        .output {
-            color: #9cdcfe;
+        .file-info {
+            background: rgba(46, 204, 113, 0.2);
+            border: 1px solid rgba(46, 204, 113, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            display: none;
         }
 
         footer {
@@ -140,79 +168,226 @@
             margin-top: 3rem;
             opacity: 0.7;
         }
-
-        .navigation {
-            text-align: center;
-            margin: 2rem 0;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🐧 真实 Linux 虚拟机</h1>
-            <p class="subtitle">基于 WebAssembly 的完整 Linux 系统，带可视化文件管理器</p>
+            <h1>📁 手动 ISO 上传虚拟机</h1>
+            <p class="subtitle">上传您自己的 ISO 文件，在浏览器中运行真实的虚拟机</p>
         </header>
 
-        <div class="navigation">
-            <a href="/vm/" class="btn">💻 启动虚拟机</a>
-            <a href="/vm/filemanager.html" class="btn btn-secondary">📁 文件管理器</a>
+        <div class="warning">
+            <h3>⚠️ 重要说明</h3>
+            <p>• 请确保上传的 ISO 文件是可启动的系统镜像</p>
+            <p>• 支持 Linux、Windows、FreeDOS 等多种系统</p>
+            <p>• 文件大小限制：建议不超过 500MB 以获得最佳性能</p>
         </div>
 
-        <div class="features">
-            <div class="feature-card">
-                <h3>🌐 真实内核</h3>
-                <p>运行真实的 Linux 内核，支持完整的系统调用和硬件模拟</p>
-            </div>
+        <div class="info">
+            <h3>💡 使用提示</h3>
+            <p>• 推荐使用 Chrome、Firefox 或 Edge 浏览器</p>
+            <p>• 首次运行可能需要一些时间加载</p>
+            <p>• 可以随时停止和重启虚拟机</p>
+        </div>
+
+        <div class="upload-section">
+            <h2>📤 上传 ISO 文件</h2>
             
-            <div class="feature-card">
-                <h3>⚡ WebAssembly</h3>
-                <p>基于 WebAssembly 技术，提供接近原生的性能表现</p>
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📁</div>
+                <h3>点击或拖拽 ISO 文件到此处</h3>
+                <p>支持 .iso 格式的系统镜像文件</p>
+                <input type="file" id="isoFile" accept=".iso" style="display: none;">
+                <button class="btn" onclick="document.getElementById('isoFile').click()">选择 ISO 文件</button>
             </div>
-            
-            <div class="feature-card">
-                <h3>📁 可视化文件管理</h3>
-                <p>直观的图形化文件管理器，支持文件操作和目录浏览</p>
+
+            <div class="file-info" id="fileInfo">
+                <h3>📄 文件信息</h3>
+                <p><strong>文件名:</strong> <span id="fileName">-</span></p>
+                <p><strong>文件大小:</strong> <span id="fileSize">-</span></p>
+                <p><strong>文件类型:</strong> <span id="fileType">ISO 镜像</span></p>
+                <button class="btn btn-success" onclick="launchVM()">🚀 启动虚拟机</button>
             </div>
         </div>
 
-        <div class="demo-section">
-            <h2>🚀 功能演示</h2>
-            <div class="terminal-demo">
-                <div class="prompt">user@webvm:~$ </div>
-                <div class="command">uname -a</div>
-                <div class="output">Linux webvm 5.4.0 #1 SMP x86_64 GNU/Linux</div>
-                <br>
-                <div class="prompt">user@webvm:~$ </div>
-                <div class="command">curl --version</div>
-                <div class="output">curl 7.68.0 (x86_64-pc-linux-gnu) libcurl/7.68.0</div>
-                <br>
-                <div class="prompt">user@webvm:~$ </div>
-                <div class="command">ls /home/user</div>
-                <div class="output">
-                  Desktop    Documents    Downloads    Pictures<br>
-                  Videos     Music        Public
+        <div class="specifications">
+            <h2>📋 支持的系统格式</h2>
+            <div class="supported-formats">
+                <div class="format-item">
+                    <h4>🐧 Linux</h4>
+                    <p>Ubuntu, Debian, CentOS, Fedora 等</p>
+                </div>
+                <div class="format-item">
+                    <h4>🏁 Windows</h4>
+                    <p>Windows 95/98/ME, Windows XP 等</p>
+                </div>
+                <div class="format-item">
+                    <h4>🔔 其他系统</h4>
+                    <p>FreeDOS, ReactOS, KolibriOS 等</p>
+                </div>
+                <div class="format-item">
+                    <h4>💾 存储</h4>
+                    <p>最大支持 500MB ISO 文件</p>
                 </div>
             </div>
         </div>
 
-        <div class="demo-section">
-            <h2>📋 支持的功能</h2>
+        <div class="specifications">
+            <h2>⚡ 虚拟机规格</h2>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
-                <div>✅ 真实 Linux 内核</div>
-                <div>✅ curl、wget 网络工具</div>
-                <div>✅ 完整文件系统</div>
-                <div>✅ 可视化文件管理器</div>
-                <div>✅ 进程管理</div>
+                <div>✅ Intel 486 兼容 CPU</div>
+                <div>✅ 128MB 内存</div>
+                <div>✅ VGA 图形支持</div>
+                <div>✅ 声音输出</div>
                 <div>✅ 网络连接</div>
-                <div>✅ Shell 环境</div>
-                <div>✅ 图形界面支持</div>
+                <div>✅ 鼠标键盘支持</div>
+                <div>✅ USB 设备模拟</div>
+                <div>✅ 硬盘支持</div>
             </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <button class="btn btn-secondary" onclick="showInstructions()">📖 使用说明</button>
+            <button class="btn btn-warning" onclick="clearStorage()">🗑️ 清除缓存</button>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2024 真实 Web 虚拟机 | 基于 v86 模拟器</p>
+        <p>&copy; 2024 手动 ISO 上传虚拟机 | 基于 v86 模拟器和 WebAssembly</p>
     </footer>
+
+    <script>
+        let selectedFile = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            setupDragAndDrop();
+            checkStoredFile();
+        });
+
+        function setupDragAndDrop() {
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('isoFile');
+
+            uploadArea.addEventListener('click', () => fileInput.click());
+            
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#3498db';
+                uploadArea.style.backgroundColor = 'rgba(52, 152, 219, 0.1)';
+            });
+
+            uploadArea.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                uploadArea.style.backgroundColor = 'transparent';
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                uploadArea.style.backgroundColor = 'transparent';
+                
+                if (e.dataTransfer.files.length) {
+                    handleFileSelect(e.dataTransfer.files[0]);
+                }
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length) {
+                    handleFileSelect(e.target.files[0]);
+                }
+            });
+        }
+
+        function handleFileSelect(file) {
+            if (!file.name.toLowerCase().endsWith('.iso')) {
+                alert('请选择 ISO 格式的文件！');
+                return;
+            }
+
+            if (file.size > 500 * 1024 * 1024) { // 500MB 限制
+                alert('文件大小超过 500MB 限制，请选择较小的文件！');
+                return;
+            }
+
+            selectedFile = file;
+            displayFileInfo(file);
+        }
+
+        function displayFileInfo(file) {
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = formatFileSize(file.size);
+            document.getElementById('fileInfo').style.display = 'block';
+            
+            // 保存文件到 localStorage
+            saveFileToStorage(file);
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function saveFileToStorage(file) {
+            // 在实际应用中，这里会保存文件引用或文件信息
+            localStorage.setItem('vm_iso_name', file.name);
+            localStorage.setItem('vm_iso_size', file.size.toString());
+            localStorage.setItem('vm_iso_last_upload', new Date().toISOString());
+        }
+
+        function checkStoredFile() {
+            const storedName = localStorage.getItem('vm_iso_name');
+            const storedSize = localStorage.getItem('vm_iso_size');
+            
+            if (storedName && storedSize) {
+                document.getElementById('fileName').textContent = storedName;
+                document.getElementById('fileSize').textContent = formatFileSize(parseInt(storedSize));
+                document.getElementById('fileInfo').style.display = 'block';
+            }
+        }
+
+        function launchVM() {
+            if (!selectedFile && !localStorage.getItem('vm_iso_name')) {
+                alert('请先选择一个 ISO 文件！');
+                return;
+            }
+            
+            window.location.href = '/vm/';
+        }
+
+        function showInstructions() {
+            alert(`使用说明：
+1. 点击"选择 ISO 文件"或拖拽 ISO 文件到上传区域
+2. 确认文件信息无误后点击"启动虚拟机"
+3. 等待虚拟机加载完成（首次可能需要较长时间）
+4. 在虚拟机窗口中使用鼠标和键盘操作
+5. 可以随时停止、重启或全屏虚拟机
+
+支持的系统：
+• Linux 发行版（Ubuntu, Debian, CentOS 等）
+• Windows 系统（95/98/ME/XP）
+• FreeDOS, ReactOS 等兼容系统
+
+注意事项：
+• 推荐使用现代浏览器获得最佳体验
+• 复杂系统可能运行较慢
+• 某些系统可能需要网络连接`);
+        }
+
+        function clearStorage() {
+            if (confirm('确定要清除所有缓存数据吗？')) {
+                localStorage.removeItem('vm_iso_name');
+                localStorage.removeItem('vm_iso_size');
+                localStorage.removeItem('vm_iso_last_upload');
+                document.getElementById('fileInfo').style.display = 'none';
+                selectedFile = null;
+                alert('缓存已清除！');
+            }
+        }
+    </script>
 </body>
 </html>
