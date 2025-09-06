@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>真实 Linux 虚拟机 - 带文件管理器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            min-height: 100vh;
+            color: white;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #00c6ff;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0, 114, 255, 0.3);
+            border: none;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 114, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .demo-section {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .demo-section h2 {
+            margin-bottom: 1rem;
+            color: #00c6ff;
+        }
+
+        .terminal-demo {
+            background: #1e1e1e;
+            border-radius: 10px;
+            padding: 1.5rem;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .prompt {
+            color: #569cd6;
+        }
+
+        .command {
+            color: #d4d4d4;
+        }
+
+        .output {
+            color: #9cdcfe;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            opacity: 0.7;
+        }
+
+        .navigation {
+            text-align: center;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🐧 真实 Linux 虚拟机</h1>
+            <p class="subtitle">基于 WebAssembly 的完整 Linux 系统，带可视化文件管理器</p>
+        </header>
+
+        <div class="navigation">
+            <a href="/vm/" class="btn">💻 启动虚拟机</a>
+            <a href="/vm/filemanager.html" class="btn btn-secondary">📁 文件管理器</a>
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <h3>🌐 真实内核</h3>
+                <p>运行真实的 Linux 内核，支持完整的系统调用和硬件模拟</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>⚡ WebAssembly</h3>
+                <p>基于 WebAssembly 技术，提供接近原生的性能表现</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>📁 可视化文件管理</h3>
+                <p>直观的图形化文件管理器，支持文件操作和目录浏览</p>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>🚀 功能演示</h2>
+            <div class="terminal-demo">
+                <div class="prompt">user@webvm:~$ </div>
+                <div class="command">uname -a</div>
+                <div class="output">Linux webvm 5.4.0 #1 SMP x86_64 GNU/Linux</div>
+                <br>
+                <div class="prompt">user@webvm:~$ </div>
+                <div class="command">curl --version</div>
+                <div class="output">curl 7.68.0 (x86_64-pc-linux-gnu) libcurl/7.68.0</div>
+                <br>
+                <div class="prompt">user@webvm:~$ </div>
+                <div class="command">ls /home/user</div>
+                <div class="output">
+                  Desktop    Documents    Downloads    Pictures<br>
+                  Videos     Music        Public
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>📋 支持的功能</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                <div>✅ 真实 Linux 内核</div>
+                <div>✅ curl、wget 网络工具</div>
+                <div>✅ 完整文件系统</div>
+                <div>✅ 可视化文件管理器</div>
+                <div>✅ 进程管理</div>
+                <div>✅ 网络连接</div>
+                <div>✅ Shell 环境</div>
+                <div>✅ 图形界面支持</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 真实 Web 虚拟机 | 基于 v86 模拟器</p>
+    </footer>
+</body>
+</html>
